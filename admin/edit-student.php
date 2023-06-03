@@ -2,22 +2,14 @@
     require_once "include/header.php";
 ?>
 
-<?php 
-    require_once "include/header.php";
-?>
-
-<?php
-    require_once "include/header.php";
-?>
-
 
 <?php  
 
 
-         $id = $_GET["id"];
+        $id = $_GET["id"];
         require_once "../connection.php";
 
-        $sql = "SELECT * FROM student WHERE id = $id ";
+        $sql = "SELECT * FROM students WHERE id = $id ";
         $result = mysqli_query($conn , $sql);
 
         if(mysqli_num_rows($result) > 0 ){
@@ -28,8 +20,8 @@
                 $dob = $rows["dob"];
                 $gender = $rows["gender"];
                 $mobile = $rows["mobile"];
-                $section = $rows["section"];
-                $groupe = $rows["groupe"];
+                $section_id = $rows["section_id"];
+                $groupe_id = $rows["grp_id"];
             }
         }
 
@@ -37,7 +29,8 @@
         
       
 
-        if( $_SERVER["REQUEST_METHOD"] == "POST" ){
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            header('Location:dashboard.php');
 
             if( empty($_REQUEST["gender"]) ){
                 $gender ="";
@@ -97,8 +90,8 @@
 
                 
                    
-
-                    $sql = "UPDATE student SET name = '$name' , email = '$email' , dob='$dob', gender='$gender' , mobile='$mobile' , section='$section' , groupe='$groupe' WHERE id = $_GET[id] ";
+                    $id = _GET['id'];
+                    $sql = "UPDATE students SET name = '$name' , email = '$email' , dob='$dob', gender='$gender' , mobile='$mobile' , section_id='$section' , grp_id='$groupe' WHERE id = '$id' ";
                     $result = mysqli_query($conn , $sql);
                     if($result){
                         echo "<script>
@@ -116,7 +109,7 @@
                     
                 
 
-            }
+            }else{header('Location:login.php?empty');}
         }
 
 ?>
@@ -132,7 +125,7 @@
                         <div class="card login-form mb-0">
                             <div class="card-body pt-4 shadow">
                                 <h4 class="text-center">Edit student profile</h4>
-                                <form method="POST" action=" <?php htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+                                <form method="POST" action="<?php htmlspecialchars($_SERVER['PHP_SELF']); ?>">
 
                                     <div class="form-group">
                                         <label>Full Name :</label>
@@ -163,7 +156,7 @@
                                             <option value="">Select a section</option>
                                             <?php
         // Connect to the database
-        $conn = mysqli_connect('localhost', 'root', '', 'employee_management');
+        $conn = mysqli_connect('localhost', 'root', '', 'faculty');
 
         // Check connection
         if (!$conn) {
@@ -174,15 +167,15 @@
 
 
         // Retrieve sections from the database
-        $sql = "SELECT DISTINCT section FROM secgrp";
+        $sql = "SELECT * FROM section";
         $result = mysqli_query($conn, $sql);
 
         // Loop through the results and add options to the select element
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
-                $section = $row['section'];
+                $section = $row['name'];
                 echo "<option value=\"$section\"";
-                if ($section == $selected_section) {
+                if ($section_id == $row['id']) {
                     echo " selected";
                 }
                 echo ">$section</option>";
@@ -203,7 +196,7 @@
                                             <option value="">Select a groupe</option>
                                             <?php
         // Connect to the database
-        $conn = mysqli_connect('localhost', 'root', '', 'employee_management');
+        $conn = mysqli_connect('localhost', 'root', '', 'faculty');
 
         // Check connection
         if (!$conn) {
@@ -214,15 +207,16 @@
 
 
         // Retrieve groupes from the database
-        $sql = "SELECT DISTINCT groupe FROM secgrp";
+        $sql = "SELECT * FROM grp";
         $result = mysqli_query($conn, $sql);
 
         // Loop through the results and add options to the select element
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
-                $groupe = $row['groupe'];
-                echo "<option value=\"$groupe\"";
-                if ($groupe == $selected_groupe) {
+                $groupe = $row['name'];
+                $id = $row['id'];
+                echo "<option value=\"$id\"";
+                if ($groupe_id == $id) {
                     echo " selected";
                 }
                 echo ">$groupe</option>";
@@ -261,7 +255,7 @@
 
                                     <br>
 
-                                    <button type="submit" class="btn btn-primary btn-block">Edit</button>
+                                    <button type="submit" name="submit" value="Submit" class="btn btn-primary btn-block">Edit</button>
                                 </form>
                             </div>
                         </div>

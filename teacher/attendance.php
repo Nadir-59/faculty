@@ -12,14 +12,6 @@
         die("Connection failed: " . mysqli_connect_error());
     }
 
-
-
-
-  
-
-
-    
-
     // Retrieve filter values
     $level = $_GET['level'] ?? '';
     $section = $_GET['section'] ?? '';
@@ -51,42 +43,14 @@
         $studentId = 0;
 
         // Fetch the teacher's information and subjects taught
-        $teacherName = "bahlouli boualem"; // Replace with the actual teacher's name
-        $query = "SELECT t.id, t.name, ts.subject_id, s.name AS subject_name
-                  FROM teacher t
-                  INNER JOIN teacher_subject ts ON t.id = ts.teacher_id
-                  INNER JOIN subject s ON ts.subject_id = s.id
-                  WHERE t.name = '$teacherName'";
-        $teacherResult = mysqli_query($connection, $query);
-        
-        if (mysqli_num_rows($teacherResult) > 0) {
-            $teacherRow = mysqli_fetch_assoc($teacherResult);
-            $teacherId = $teacherRow['id'];
-            $teacherName = $teacherRow['name'];
-        
-            // Generate checkboxes for subjects taught by the teacher
-            do {
-                $subjectId = $teacherRow['subject_id'];
-                $subjectName = $teacherRow['subject_name'];
-                $subjectCheckboxes .= "<div class='form-check'>
-                                            <input type='checkbox' name='subject' value='{$subjectName}' class='form-check-input'>
-                                            <label class='form-check-label'>{$subjectName}</label>
-                                        </div>";
-            } while ($teacherRow = mysqli_fetch_assoc($teacherResult));
-        
-            // ...
-        
-        } else {
-            echo "Teacher not found.";
-        }
+     
 
 
         ?>
+  <!-- form get to filter -->     
   <form method="GET" action="">
     <div class="d-flex align-items-center">
-
-
-    <label for="level" class="ml-2">level:</label>
+        <label for="level" class="ml-2">level:</label>
         <select name="level" id="level" class="form-control ml-2" style="width:11%">
             <option value="">All levels</option>
             <?php
@@ -174,22 +138,22 @@
     </div>
 
     <form method="POST" action="save_attendance.php" id="attendanceForm">
-        <select name="attendance" id="level" class="form-control ml-2" style="width:11%">
+        <select name="subject" id="level" class="form-control ml-2" style="width:11%">
            
         <?php 
-            // Retrieve levels from the "level" table and populate the options
+            // Retrieve subject from the "subject" table and populate the options
             $teacherName = $_SESSION["teacher_name"];
             $query = "SELECT t.id, t.name, ts.subject_id, s.name AS subject_name
                   FROM teacher t
                   INNER JOIN teacher_subject ts ON t.id = ts.teacher_id
                   INNER JOIN subject s ON ts.subject_id = s.id
                   WHERE t.name = '$teacherName'";
-            $levels = mysqli_query($connection, $query);
-            while ($levelRow = mysqli_fetch_assoc($levels)) {
-                $levelId = $levelRow['id'];
-                $levelName = $levelRow['subject_name'];
-                $selected = ($level == $levelId) ? 'selected' : '';
-                echo "<option value='$levelName' $selected>$levelName</option>";
+            $subjects = mysqli_query($connection, $query);
+            while ($subjectRow = mysqli_fetch_assoc($subjects)) {
+                $subjectId = $subjectRow['id'];
+                $subjectName = $subjectRow['subject_name'];
+                $selected = ($subject == $subjectId) ? 'selected' : '';
+                echo "<option value='$subjectName' $selected>$subjectName</option>";
             }
             ?>
         </select>

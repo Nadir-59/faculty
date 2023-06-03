@@ -12,7 +12,12 @@
 //  database connection
 require_once "../connection.php";
 
-$sql = "SELECT * FROM student";
+$sql = "SELECT st.id, st.name AS student_name, st.dob, st.email, st.mobile, st.gender,
+               sec.name AS section_name, g.name AS group_name, lvl.name AS level_name
+        FROM students st
+        INNER JOIN section sec ON st.section_id = sec.id
+        INNER JOIN grp g ON st.grp_id = g.id
+        INNER JOIN level lvl ON st.level_id = lvl.id";
 $result = mysqli_query($conn , $sql);
 
 $i = 1;
@@ -56,9 +61,9 @@ table {
             $dob = $rows["dob"];
             $gender = $rows["gender"];
             $id = $rows["id"];
-            $section = $rows["section"];
-            $groupe = $rows["groupe"];
-            $level = $rows["level"];
+            $section = $rows["section_name"];
+            $groupe = $rows["group_name"];
+            $level = $rows["level_name"];
             $mobile = $rows["mobile"];
             if($gender == "" ){
                 $gender = "Not Defined";
@@ -82,7 +87,7 @@ table {
         <td><?php echo $mobile; ?></td>
 
         <td>  <?php 
-                $edit_icon = "<a href='edit-student.php?id= {$id}' class='btn-sm btn-primary float-right ml-3 '> <span ><i class='fa fa-edit '></i></span> </a>";
+                $edit_icon = "<a href='edit-student.php?id={$id}' class='btn-sm btn-primary float-right ml-3 '> <span ><i class='fa fa-edit '></i></span> </a>";
                 $delete_icon = " <a href='delete-student.php?id={$id}' id='bin' class='btn-sm btn-primary float-right'> <span ><i class='fa fa-trash '></i></span> </a>";
                 echo $edit_icon . $delete_icon;
              ?> 

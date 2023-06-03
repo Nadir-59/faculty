@@ -17,15 +17,18 @@
 
 	<!--Custom styles-->
 	<link rel="stylesheet" type="text/css" href="styles.css">
+	 <!-- library provides animations  -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
 </head>
 <body>
 <div class="container">
 	<div class="d-flex justify-content-center h-100">
-		<div class="card">
+		<div class="card animated bounceInDown">
 			<div class="card-header">
 				<h3>Sign In</h3>
 				<div class="d-flex justify-content-start social_icon">
-                <img class="img" width="30" id="profile-img" class="profile-img-card" src="resorce/images/zzz.png"/>
+                <img width="50" id="profile-img" class="icon" src="resorce/images/zzz.png"/>
 
 				</div>
 			</div>
